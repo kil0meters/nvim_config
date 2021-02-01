@@ -1,0 +1,30 @@
+{
+    "HeadingOne": {
+        "prefix": "=",
+        "body": [
+            "= ${1:title} ="
+        ],
+        "description": "Heading One"
+    },
+    "HeadingTwo": {
+        "prefix": "==",
+        "body": [
+            "== ${1:title} =="
+        ],
+        "description": "Heading Two"
+    },
+    "HeadingThree": {
+        "prefix": "===",
+        "body": [
+            "=== ${1:title} ==="
+        ],
+        "description": "Heading Three"
+    },
+    "HeadingFour": {
+        "prefix": "====",
+        "body": [
+            "==== ${1:title} ===="
+        ],
+        "description": "Heading Four"
+    }
+}

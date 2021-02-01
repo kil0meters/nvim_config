@@ -1,0 +1,13 @@
+{
+    "Main Template": {
+        "prefix": "main",
+        "body": [
+            "#include <stdio.h>",
+            "",
+            "int main() {",
+            "    $1",
+            "}"
+        ],
+        "description": "Main Template"
+    }
+}
