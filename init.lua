@@ -2,17 +2,11 @@
 cmd = vim.cmd
 fn = vim.fn
 g = vim.g
-local scopes = {o = vim.o, b = vim.bo, w = vim.wo}
 
-local function opt(scope, key, value)
-  scopes[scope][key] = value
-  if scope ~= 'o' then scopes['o'][key] = value end
-end
+local map = vim.api.nvim_set_keymap
 
-local function map(mode, lhs, rhs, opts)
-  local options = {noremap = true}
-  if opts then options = vim.tbl_extend('force', options, opts) end
-  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+local function t(str)
+    return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
 require 'plugins'
@@ -26,93 +20,136 @@ local width = 80
 
 -- Local
 
-opt('b', 'expandtab',     true)     -- use spaces instead of tabs
-opt('b', 'smartindent',   true)     -- automatically indent in functions
-opt('b', 'shiftwidth',    ident)    -- tab length
-opt('b', 'tabstop',       ident)    -- tab length
-opt('b', 'softtabstop',   ident)    -- tab length
-opt('b', 'textwidth',     80)       -- maximum text width
-opt('b', 'wrapmargin',    80)       -- when to start wrapping
-opt('b', 'formatoptions', 'jcroql') -- format options
-opt('b', 'spelllang',     'en_us')  -- language for spell checker
-opt('b', 'syntax',        'on')     -- enable syntax highlighting
-opt('b', 'undofile',      true)     -- undofile
+vim.bo.expandtab = true         -- use spaces instead of tabs
+vim.bo.smartindent = true       -- automatically indent in functions
+vim.bo.shiftwidth = ident       -- tab length
+vim.bo.tabstop = ident          -- tab length
+vim.bo.softtabstop = ident      -- tab length
+vim.bo.textwidth = 80           -- maximum text width
+vim.bo.wrapmargin = 80          -- when to start wrapping
+vim.bo.formatoptions = 'jcroql' -- format options
+vim.bo.spelllang = 'en_us'      -- language for spell checker
+vim.bo.syntax = 'on'            -- enable syntax highlighting
+vim.bo.undofile = true          -- undofile
 
 -- Global
 
-opt('o', 'termguicolors', true)                    -- use rgb colors in the tui
-opt('o', 'clipboard',     'unnamedplus')           -- use system clipboard register
-opt('o', 'inccommand',    'nosplit')               -- shows the effects of search as you type
-opt('o', 'lazyredraw',    true)                    -- don't redraw while executing macros
-opt('o', 'mouse',         'a')                     -- mouse control
-opt('o', 'smarttab',      true)                    -- backspace deletes 'shiftwidth' spaces
-opt('o', 'ignorecase',    true)                    -- ignore capitalization while searching
-opt('o', 'smartcase',     true)                    -- override 'ignorecase' if there is a capital letter
-opt('o', 'hlsearch',      false)                   -- don't highlight previous search terms
-opt('o', 'scrolloff',     20)                      -- screen lines to keep above and below cursor
-opt('o', 'splitbelow',    true)                    -- split below
-opt('o', 'splitbelow',    true)                    -- split right
-opt('o', 'updatetime',    1000)                    -- how long CursorHold takes
-opt('o', 'completeopt',   'menu,menuone,noselect') -- completion options
-opt('o', 'shortmess',     'filnxtToOFc')           -- ui setting
-opt('o', 'swapfile',      false)                   -- disable swap files
-opt('o', 'backup',        false)                   
+vim.o.termguicolors = true                  -- use rgb colors in the tui
+vim.o.clipboard = 'unnamedplus'             -- use system clipboard register
+vim.o.inccommand = 'nosplit'                -- shows the effects of search as you type
+vim.o.lazyredraw = true                     -- don't redraw while executing macros
+vim.o.mouse = 'a'                           -- mouse control
+vim.o.smarttab = true                       -- backspace deletes 'shiftwidth' spaces
+vim.o.ignorecase = true                     -- ignore capitalization while searching
+vim.o.smartcase = true                      -- override 'ignorecase' if there is a capital letter
+vim.o.hlsearch = false                      -- don't highlight previous search terms
+vim.o.scrolloff = 20                        -- screen lines to keep above and below cursor
+vim.o.splitbelow = true                     -- split below
+vim.o.splitbelow = true                     -- split right
+vim.o.updatetime = 1000                     -- how long CursorHold takes
+vim.o.completeopt = 'menu,menuone,noselect' -- completion options
+vim.o.shortmess = 'filnxtToOFc'             -- ui setting
+vim.o.swapfile = false                      -- disable swap files
+vim.o.backup = false                        --
 
 -- Window
 
-opt('w', 'relativenumber', true)     -- relative line numbering
-opt('w', 'number',         true)     -- line numbering
-opt('w', 'wrap',           false)    -- line wrapping
-opt('w', 'list',           true)     -- display a character for tabs
-opt('w', 'lcs',            'tab:▏ ') -- display character for space tabs
-opt('w', 'foldmethod',     'syntax') -- fold based on syntax
-opt('w', 'signcolumn',     'yes')    -- enable sign column all the time
-opt('w', 'foldlevel',      99)       -- don't fold files when opened
+vim.wo.relativenumber = true -- relative line numbering
+vim.wo.number = true         -- line numbering
+vim.wo.wrap = false          -- line wrapping
+vim.wo.list = true           -- display a character for tabs
+vim.wo.lcs = 'tab:▏ '         -- display character for space tabs
+vim.wo.foldmethod = 'syntax' -- fold based on syntax
+vim.wo.signcolumn = 'yes'    -- enable sign column all the time
+vim.wo.foldlevel = 99        -- don't fold files when opened
 
 -----MAPPINGS-----
+_G.completion_confirm = function()
+  if vim.fn.pumvisible() ~= 0 then
+    if vim.fn.complete_info()["selected"] == -1 then
+      return t'<C-n>' .. vim.fn["compe#confirm"]()
+    else
+      return vim.fn["compe#confirm"]()
+    end
+  else
+    return require'nvim-autopairs'.check_break_line_char()
+  end
+end
 
--- General
-map('i', 'jj',    '<Esc>',       {silent = true, noremap = true})
+_G.tab = function()
+  if vim.fn.pumvisible() ~= 0 then
+    return t'<C-n>'
+  elseif vim.fn['vsnip#jumpable'](1) ~= 0 then
+    -- For whatever reason the nvim api doesn't escape <Plug>
+    cmd [[ call feedkeys("\<Plug>(vsnip-jump-next)") ]]
+    return ''
+  else
+    return t'<Tab>'
+  end
+end
 
--- Fuzzy Finding
-map('n', '<C-p>',       '<cmd>Telescope find_files<CR>',            {silent = true, noremap = true})
-map('n', '<leader>fl',  '<cmd>Telescope live_grep<CR>',             {silent = true, noremap = true})
-map('n', '<leader>fL',  '<cmd>Telescope grep_string<CR>',           {silent = true, noremap = true})
-map('n', '<leader>fs',  '<cmd>Telescope lsp_workspace_symbols<CR>', {silent = true, noremap = true})
-map('n', '<leader>fr',  '<cmd>Telescope lsp_references<CR>',        {silent = true, noremap = true})
-map('n', '<leader>fc',  '<cmd>Telescope commands<CR>',              {silent = true, noremap = true})
-map('n', '<leader>fb',  '<cmd>Telescope buffers<CR>',               {silent = true, noremap = true})
-map('n', '<leader>fgl', '<cmd>Telescope git_commits<CR>',           {silent = true, noremap = true})
+_G.s_tab = function()
+  if vim.fn.pumvisible() ~= 0 then
+    return t'<C-p>'
+  elseif vim.fn['vsnip#jumpable'](1) ~= 0 then
+    cmd [[ call feedkeys("\<Plug>(vsnip-jump-prev)") ]]
+    return ''
+  else
+    return t'<S-Tab>'
+  end
+end
 
--- vim lsp
-cmd [[
-imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'       : pumvisible()                     ? '<C-n>'                      : '<Tab>'
-smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'       : pumvisible()                     ? '<C-n>'                      : '<Tab>'
-imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'       : pumvisible()                     ? '<C-p>'                      : '<S-Tab>'
-smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'       : pumvisible()                     ? '<C-p>'                      : '<S-Tab>'
-imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'          : (&spell)                         ? '<C-G>u<Esc>[s1z=`]a<C-G>u'  : '<C-j>'
-imap <expr> <CR>    pumvisible()        ? (complete_info().selected == -1 ? '<C-n><C-y><Plug>(vsnip-expand)' : '<C-y><Plug>(vsnip-expand)') : '<CR>'
+_G.snippet_completion = function()
+  if vim.fn['vsnip#expandable']() ~= 0 then
+    cmd [[ call feedkeys("\<Plug>(vsnip-expand)") ]]
+    return ''
+  elseif vim.fn.pumvisible() ~= 0 then
+    return vim.fn["compe#confirm"]()
+  elseif vim.wo.spell then
+    return t'<C-G>u<Esc>[s1z=`]a<C-G>u'
+  else
+    return t'<C-j>'
+  end
+end
 
-inoremap <silent><expr> <C-Space> compe#complete()
-]]
+-- general
+map('i', 'jj', '<Esc>', {silent = true, noremap = true})
 
--- compe#confirm(\'<CR>\')
+-- completion
+map('i', '<Tab>',     'v:lua.tab()',                {expr = true, noremap = true})
+map('s', '<Tab>',     'v:lua.tab()',                {expr = true, noremap = true})
+map('i', '<S-Tab>',   'v:lua.s_tab()',              {expr = true, noremap = true})
+map('s', '<S-Tab>',   'v:lua.s_tab()',              {expr = true, noremap = true})
+map('i', '<C-Space>', 'compe#complete()',           {expr = true, noremap = true})
+map('i', '<CR>',      'v:lua.completion_confirm()', {expr = true, noremap = true})
+map('i', '<C-j>',     'v:lua.snippet_completion()', {expr = true, noremap = true})
+
+-- langauge server protocol
 map('n', '<c-]>',      ':lua vim.lsp.buf.definition()<CR>',         {silent = true, noremap = true})
 map('n', 'K',          ':lua vim.lsp.buf.hover()<CR>',              {silent = true, noremap = true})
 map('n', 'gD',         ':lua vim.lsp.buf.implementation()<CR>',     {silent = true, noremap = true})
-map('n', 'I',          ':lua vim.lsp.buf.signature_help()<CR>',     {silent = true, noremap = true})
-map('n', 'gr',         ':lua vim.lsp.buf.references()<CR>',         {silent = true, noremap = true})
-map('n', 'gR',         ':lua vim.lsp.buf.rename()<CR>',             {silent = true, noremap = true})
-map('n', 'g0',         ':lua vim.lsp.buf.document_symbol()<CR>',    {silent = true, noremap = true})
-map('n', 'gW',         ':lua vim.lsp.buf.workspace_symbol()<CR>',   {silent = true, noremap = true})
 map('n', 'gd',         ':lua vim.lsp.buf.definition()<CR>',         {silent = true, noremap = true})
+map('n', 'I',          ':lua vim.lsp.buf.signature_help()<CR>',     {silent = true, noremap = true})
+map('n', 'gr',         ':Telescope lsp_references<CR>',             {silent = true, noremap = true})
+map('n', 'ga',         ':lua vim.lsp.buf.code_action()<CR>',        {silent = true, noremap = true})
+map('n', 'gs',         ':Telescope lsp_workspace_symbols<CR>',      {silent = true, noremap = true})
+map('n', 'gS',         ':Telescope lsp_document_symbols<CR>',       {silent = true, noremap = true})
+map('n', 'gR',         ':lua vim.lsp.buf.rename()<CR>',             {silent = true, noremap = true})
 map('n', '<leader>do', ':lua vim.lsp.diagnostic.set_loclist()<CR>', {silent = true, noremap = true})
 
+-- fuzzy finding
+map('n', '<C-p>',       '<cmd>Telescope find_files theme=get_dropdown<CR>',  {silent = true, noremap = true})
+map('n', '<leader>fl',  '<cmd>Telescope live_grep<CR>',                      {silent = true, noremap = true})
+map('n', '<leader>fL',  '<cmd>Telescope grep_string theme=get_dropdown<CR>', {silent = true, noremap = true})
+map('n', '<leader>fc',  '<cmd>Telescope commands theme=get_dropdown<CR>',    {silent = true, noremap = true})
+map('n', '<leader>fb',  '<cmd>Telescope buffers theme=get_dropdown<CR>',     {silent = true, noremap = true})
+map('n', '<leader>fgl', '<cmd>Telescope git_commits theme=get_dropdown<CR>', {silent = true, noremap = true})
+
 -- window navigation
--- map('n', '<leader>h',   '<C-w>h',     {silent = true, noremap = true})
--- map('n', '<leader>j',   '<C-w>j',     {silent = true, noremap = true})
--- map('n', '<leader>k',   '<C-w>k',     {silent = true, noremap = true})
--- map('n', '<leader>l',   '<C-w>l',     {silent = true, noremap = true})
+map('n', '<leader>wh',  '<C-w>h',     {silent = true, noremap = true})
+map('n', '<leader>wj',  '<C-w>j',     {silent = true, noremap = true})
+map('n', '<leader>wk',  '<C-w>k',     {silent = true, noremap = true})
+map('n', '<leader>wl',  '<C-w>l',     {silent = true, noremap = true})
 map('n', '<leader>wq',  '<C-w>q',     {silent = true, noremap = true})
 map('n', '<leader>ws',  '<C-w>s',     {silent = true, noremap = true})
 map('n', '<leader>wv',  '<C-w>v',     {silent = true, noremap = true})
@@ -133,10 +170,6 @@ map('n', '<leader>gp', ':Gpush<CR>',   {silent = true, noremap = true})
 map('n', '<leader>gb', ':Gblame<CR>',  {silent = true, noremap = true})
 map('n', '<leader>gl', ':Glog<CR>',    {silent = true, noremap = true})
 
--- easyalign
-map('x', 'ga', '<Plug>(EasyAlign)')
-map('n', 'ga', '<Plug>(EasyAlign)')
-
 -----COMMANDS------
 
 cmd [[
@@ -145,6 +178,6 @@ filetype plugin indent on
 
 command! -bang -nargs=* WikiRg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, fzf#vim#with_preview({'dir': '/home/kilometers/vimwiki'}), <bang>0)
 
-" autocmd BufWritePre * :%s/\s\+$//e -- remove trailing spaces on file save
+autocmd BufWritePre * :%s/\s\+$//e -- remove trailing spaces on file save
 
 ]]

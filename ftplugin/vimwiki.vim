@@ -1,10 +1,5 @@
-imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)' : pumvisible() ? "\<C-n>" : '<C-t>'
-smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)' : pumvisible() ? "\<C-n>" : '<C-t>'
-imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? "\<C-p>" : '<S-Tab>'
-smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? "\<C-p>" : '<S-Tab>'
-imap <expr> <CR>    pumvisible() ? (complete_info().selected == -1 ? '<C-n><C-y><Plug>(vsnip-expand)' : '<C-y><Plug>(vsnip-expand)') : '<C-]><Esc>:VimwikiReturn 1 5<CR>'
+" imap <buffer> <expr> <CR>    pumvisible() ? (complete_info().selected == -1 ? '<C-n><C-y><Plug>(vsnip-expand)' : '<C-y><Plug>(vsnip-expand)') : '<C-]><Esc>:VimwikiReturn 1 5<CR>'
 " imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? "\<C-p>" : '<S-Tab>'
 " smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? "\<C-p>" : '<S-Tab>'
-
 setlocal fo+=t
 setlocal spell

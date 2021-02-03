@@ -50,5 +50,12 @@
       "}"
     ],
     "description": "Creates a gtk subclass of a widget"
+  },
+  "Print Variable": {
+    "prefix": "pv",
+    "body": [
+      "println!(\"$1: {}\", $1);$0"
+    ],
+    "description": "Print a variable"
   }
 }

@@ -26,5 +26,15 @@
             "==== ${1:title} ===="
         ],
         "description": "Heading Four"
+    },
+    "Title": {
+      "prefix": "title",
+      "body": [
+        "%title ${1:Title}",
+        "%date $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE",
+        "",
+        "$0"
+      ],
+      "description": "Fill in the title and date"
     }
 }
