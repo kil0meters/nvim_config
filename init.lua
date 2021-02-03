@@ -25,12 +25,24 @@ vim.bo.smartindent = true       -- automatically indent in functions
 vim.bo.shiftwidth = ident       -- tab length
 vim.bo.tabstop = ident          -- tab length
 vim.bo.softtabstop = ident      -- tab length
-vim.bo.textwidth = 80           -- maximum text width
-vim.bo.wrapmargin = 80          -- when to start wrapping
+vim.bo.textwidth = width        -- maximum text width
+vim.bo.wrapmargin = width       -- when to start wrapping
 vim.bo.formatoptions = 'jcroql' -- format options
 vim.bo.spelllang = 'en_us'      -- language for spell checker
 vim.bo.syntax = 'on'            -- enable syntax highlighting
 vim.bo.undofile = true          -- undofile
+
+vim.o.expandtab = true         -- use spaces instead of tabs
+vim.o.smartindent = true       -- automatically indent in functions
+vim.o.shiftwidth = ident       -- tab length
+vim.o.tabstop = ident          -- tab length
+vim.o.softtabstop = ident      -- tab length
+vim.o.textwidth = width        -- maximum text width
+vim.o.wrapmargin = width       -- when to start wrapping
+vim.o.formatoptions = 'jcroql' -- format options
+vim.o.spelllang = 'en_us'      -- language for spell checker
+vim.o.syntax = 'on'            -- enable syntax highlighting
+vim.o.undofile = true          -- undofile
 
 -- Global
 
@@ -58,10 +70,19 @@ vim.wo.relativenumber = true -- relative line numbering
 vim.wo.number = true         -- line numbering
 vim.wo.wrap = false          -- line wrapping
 vim.wo.list = true           -- display a character for tabs
-vim.wo.lcs = 'tab:▏ '         -- display character for space tabs
+vim.wo.lcs = 'tab:▏ '        -- display character for space tabs
 vim.wo.foldmethod = 'syntax' -- fold based on syntax
 vim.wo.signcolumn = 'yes'    -- enable sign column all the time
 vim.wo.foldlevel = 99        -- don't fold files when opened
+
+vim.o.relativenumber = true -- relative line numbering
+vim.o.number = true         -- line numbering
+vim.o.wrap = false          -- line wrapping
+vim.o.list = true           -- display a character for tabs
+vim.o.lcs = 'tab:▏ '        -- display character for space tabs
+vim.o.foldmethod = 'syntax' -- fold based on syntax
+vim.o.signcolumn = 'yes'    -- enable sign column all the time
+vim.o.foldlevel = 99        -- don't fold files when opened
 
 -----MAPPINGS-----
 _G.completion_confirm = function()

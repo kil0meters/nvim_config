@@ -1,4 +1,4 @@
--- bootstrap packer
+-- bootstrap packer 
 local install_path = vim.fn.stdpath('data')..'/site/pack/packer/opt/packer.nvim'
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   vim.api.nvim_command('!git clone https://github.com/wbthomason/packer.nvim '..install_path)
@@ -6,7 +6,6 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 end
 
 vim.cmd [[packadd packer.nvim]]
-
 
 return require('packer').startup(function()
   use {'wbthomason/packer.nvim', opt = true}
@@ -76,14 +75,13 @@ return require('packer').startup(function()
     end
   }
 
-  -- -- Intellisense
   use {
-    'neovim/nvim-lspconfig',
+    'hrsh7th/nvim-compe',
     requires = {
-      {'hrsh7th/nvim-compe'},
       {'hrsh7th/vim-vsnip'},
       {'hrsh7th/vim-vsnip-integ'}
     },
+
     config = function()
       require'compe'.setup {
         enabled = true,
@@ -101,6 +99,13 @@ return require('packer').startup(function()
       }
 
       g.vsnip_snippet_dir = '/home/kilometers/.config/nvim/snippets'
+    end
+  }
+  -- -- Intellisense
+  use {
+    'neovim/nvim-lspconfig',
+    config = function()
+
 
       fn.sign_define("LspDiagnosticsSignError",       {text = "", texthl = "LspDiagnosticsSignError"})
       fn.sign_define("LspDiagnosticsSignWarning",     {text = "", texthl = "LspDiagnosticsSignWarning"})
@@ -109,15 +114,15 @@ return require('packer').startup(function()
 
       local lsp = require 'lspconfig'
       local on_attach = function(client)
-        cmd "augroup lsp_commands"
+        --[[ cmd "augroup lsp_commands"
         cmd "au!"
         cmd "au CursorHold <buffer> lua vim.lsp.diagnostic.show_line_diagnostics()"
 
-				if client.resolved_capabilities.document_formatting == true then
-					cmd "au BufWritePre <buffer> lua vim.lsp.buf.formatting()"
-				end
+        if client.resolved_capabilities.document_formatting == true then
+          cmd "au BufWritePre <buffer> lua vim.lsp.buf.formatting()"
+        end
 
-        cmd "augroup END"
+        cmd "augroup END" ]]
       end
 
       local system_name
@@ -165,7 +170,7 @@ return require('packer').startup(function()
         },
       }
 
-      local servers = {'html', 'cssls', 'rust_analyzer', 'clangd', 'pyright' }
+      local servers = {'html', 'cssls', 'rust_analyzer', 'clangd', 'pyright', 'gopls' }
       for _, server in ipairs(servers) do
         lsp[server].setup { on_attach=on_attach, capabilities=capabilities }
       end
@@ -225,7 +230,7 @@ return require('packer').startup(function()
     end
   }
 
-  use {
+  --[[ use {
     'kyazdani42/nvim-tree.lua',
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
     config = function()
@@ -234,9 +239,9 @@ return require('packer').startup(function()
       g.nvim_tree_git_hl = 1
       g.nvim_tree_auto_close = 1
     end
-  }
+  } ]]
 
-  use {
+  --[[ use {
     'junegunn/goyo.vim',
     opt = true,
     cmd = 'Goyo',
@@ -248,7 +253,7 @@ return require('packer').startup(function()
     config = function()
       g.goyo_width = 85
     end
-  }
+  } ]]
 
   use {
     'vimwiki/vimwiki',
@@ -288,8 +293,8 @@ return require('packer').startup(function()
   }
 
   use {
-    -- 'lewis6991/gitsigns.nvim',
-    '~/Projects/gitsigns.nvim',
+    'lewis6991/gitsigns.nvim',
+    -- '~/Projects/gitsigns.nvim',
     requires = {'nvim-lua/plenary.nvim'},
     config = function()
       require('gitsigns').setup{}
@@ -318,7 +323,7 @@ return require('packer').startup(function()
       }
     end
   }
-  
+
   use {'sukima/xmledit', ft = 'xml'}
   use {'alvan/vim-closetag', ft = {'xml', 'html'}}
   use {'tmhedberg/SimpylFold', ft = 'python'}
