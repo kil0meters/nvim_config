@@ -69,7 +69,7 @@ return require('packer').startup(function()
       branch = 'lua',
     },
     config = function()
-      g.indentLine_fileTypeExclude = { 'markdown', 'pandoc', 'vimwiki' }
+      g.indentLine_fileTypeExclude = { 'markdown', 'pandoc', 'vimwiki', 'NeogitStatus' }
       g.indentLine_char = '▏'
       g.indent_blankline_extra_indent_level = -1
     end
@@ -335,5 +335,5 @@ return require('packer').startup(function()
   use 'b3nj5m1n/kommentary'
   use 'tpope/vim-surround'
   use 'vimlab/split-term.vim'
-  use 'tpope/vim-fugitive'
+  use 'TimUntersberger/neogit'
 end)

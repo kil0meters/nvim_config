@@ -185,11 +185,7 @@ map('v', '<Tab>', '>gv',   {silent = true, noremap = true})
 map('v', '<S-Tab>', '<gv', {silent = true, noremap = true})
 
 -- git
-map('n', '<leader>gs', ':G<CR>',       {silent = true, noremap = true})
-map('n', '<leader>gc', ':Gcommit<CR>', {silent = true, noremap = true})
-map('n', '<leader>gp', ':Gpush<CR>',   {silent = true, noremap = true})
-map('n', '<leader>gb', ':Gblame<CR>',  {silent = true, noremap = true})
-map('n', '<leader>gl', ':Glog<CR>',    {silent = true, noremap = true})
+map('n', '<leader>gs', ':lua require"neogit".status.create("split")<CR>', {silent = true, noremap = true})
 
 -----COMMANDS------
 
