@@ -29,7 +29,7 @@ return require('packer').startup(function()
 
       ]]
     end
-  } 
+  }
 
   use {
     'hoob3rt/lualine.nvim',
@@ -86,7 +86,7 @@ return require('packer').startup(function()
       require'compe'.setup {
         enabled = true,
         debug = false,
-        -- preselect = 'never',
+        preselect = 'enable',
 
         source = {
           buffer = { filetypes = {'vimwiki'}}, 
@@ -114,7 +114,7 @@ return require('packer').startup(function()
 
       local lsp = require 'lspconfig'
       local on_attach = function(client)
-        --[[ cmd "augroup lsp_commands"
+        cmd "augroup lsp_commands"
         cmd "au!"
         cmd "au CursorHold <buffer> lua vim.lsp.diagnostic.show_line_diagnostics()"
 
@@ -122,7 +122,7 @@ return require('packer').startup(function()
           cmd "au BufWritePre <buffer> lua vim.lsp.buf.formatting()"
         end
 
-        cmd "augroup END" ]]
+        cmd "augroup END"
       end
 
       local system_name
@@ -170,7 +170,7 @@ return require('packer').startup(function()
         },
       }
 
-      local servers = {'html', 'cssls', 'rust_analyzer', 'clangd', 'pyright', 'gopls' }
+      local servers = {'html', 'cssls', 'yamlls', 'rust_analyzer', 'clangd', 'pyright', 'gopls' }
       for _, server in ipairs(servers) do
         lsp[server].setup { on_attach=on_attach, capabilities=capabilities }
       end
@@ -230,7 +230,7 @@ return require('packer').startup(function()
     end
   }
 
-  --[[ use {
+  use {
     'kyazdani42/nvim-tree.lua',
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
     config = function()
@@ -239,7 +239,7 @@ return require('packer').startup(function()
       g.nvim_tree_git_hl = 1
       g.nvim_tree_auto_close = 1
     end
-  } ]]
+  }
 
   --[[ use {
     'junegunn/goyo.vim',
