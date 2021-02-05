@@ -69,7 +69,13 @@ return require('packer').startup(function()
       branch = 'lua',
     },
     config = function()
-      g.indentLine_fileTypeExclude = { 'markdown', 'pandoc', 'vimwiki', 'NeogitStatus' }
+      g.indentLine_fileTypeExclude = {
+        'markdown',
+        'pandoc',
+        'vimwiki',
+        'NeogitStatus',
+        'help'
+      }
       g.indentLine_char = '▏'
       g.indent_blankline_extra_indent_level = -1
     end
@@ -324,16 +330,33 @@ return require('packer').startup(function()
     end
   }
 
+  use {
+    'b3nj5m1n/kommentary',
+    config = function()
+      require'kommentary.config'.configure_language("lua", {
+        single_line_comment_string = "--",
+        multi_line_comment_strings = {"--[[", "]]"},
+        prefer_single_line_comments = true,
+      })
+    end
+  }
+
+  use {
+    'TimUntersberger/neogit',
+    event = 'VimEnter *'
+    -- opt = true,
+    -- cmd = {'Neogit'},
+  }
+
   use {'sukima/xmledit', ft = 'xml'}
   use {'alvan/vim-closetag', ft = {'xml', 'html'}}
   use {'tmhedberg/SimpylFold', ft = 'python'}
   use {'KeitaNakamura/tex-conceal.vim', ft = 'tex'}
 
   -- use {'sheerun/vim-polyglot', event = 'VimEnter *'}
+  -- use 'tweekmonster/startuptime.vim'
 
   use 'tjdevries/lsp_extensions.nvim'
-  use 'b3nj5m1n/kommentary'
   use 'tpope/vim-surround'
   use 'vimlab/split-term.vim'
-  use 'TimUntersberger/neogit'
 end)
