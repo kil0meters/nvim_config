@@ -182,6 +182,9 @@ map('n', '<leader>wts', ':Term<CR>',  {silent = true, noremap = true})
 -- tree
 map('n', '<leader>l', ':NvimTreeToggle<CR>', {silent = true})
 
+-- undo tree
+map('n', '<leader>u', ':UndotreeToggle<CR>', {silent = true})
+
 -- indentation
 map('v', '<Tab>', '>gv',   {silent = true, noremap = true})
 map('v', '<S-Tab>', '<gv', {silent = true, noremap = true})

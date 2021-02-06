@@ -356,6 +356,7 @@ return require('packer').startup(function()
   -- use {'sheerun/vim-polyglot', event = 'VimEnter *'}
   -- use 'tweekmonster/startuptime.vim'
 
+  use 'mbbill/undotree'
   use 'tjdevries/lsp_extensions.nvim'
   use 'tpope/vim-surround'
   use 'vimlab/split-term.vim'
