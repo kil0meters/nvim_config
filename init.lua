@@ -63,6 +63,7 @@ vim.o.completeopt = 'menu,menuone,noselect' -- completion options
 vim.o.shortmess = 'filnxtToOFc'             -- ui setting
 vim.o.swapfile = false                      -- disable swap files
 vim.o.backup = false                        --
+vim.o.hidden = true
 vim.o.fillchars = 'fold: ,vert:│,eob: ,msgsep:‾'
 
 -- Window
