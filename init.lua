@@ -21,8 +21,7 @@ local width = 80
 -- Local
 
 vim.bo.expandtab = true         -- use spaces instead of tabs
-vim.bo.smartindent = true       -- automatically indent in functions
-vim.bo.shiftwidth = ident       -- tab length
+vim.bo.smartindent = true       -- automatically indent in functions vim.bo.shiftwidth = ident       -- tab length
 vim.bo.tabstop = ident          -- tab length
 vim.bo.softtabstop = ident      -- tab length
 vim.bo.textwidth = width        -- maximum text width
@@ -43,9 +42,12 @@ vim.o.formatoptions = 'jcroql' -- format options
 vim.o.spelllang = 'en_us'      -- language for spell checker
 vim.o.syntax = 'on'            -- enable syntax highlighting
 vim.o.undofile = true          -- undofile
+vim.o.autowrite = true         -- autosave
+vim.o.autowriteall = true      -- autosave
 
 -- Global
 
+vim.o.guifont = 'SFMono Nerd Font:h22'      -- font settings
 vim.o.termguicolors = true                  -- use rgb colors in the tui
 vim.o.clipboard = 'unnamedplus'             -- use system clipboard register
 vim.o.inccommand = 'nosplit'                -- shows the effects of search as you type

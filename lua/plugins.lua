@@ -7,7 +7,7 @@ end
 
 vim.cmd [[packadd packer.nvim]]
 
-return require('packer').startup(function()
+return require('packer').startup(function(use)
   use {'wbthomason/packer.nvim', opt = true}
 
   use {
@@ -43,12 +43,16 @@ return require('packer').startup(function()
 
   use {
     'norcalli/nvim-colorizer.lua',
-    ft = {'html', 'css', 'javscript', 'typescript'},
-    config = function() 
+    ft = {'html', 'css', 'javscript', 'typescript', 'config', 'conf', 'dosini', 'yaml'},
+    config = function()
       require 'colorizer'.setup(
       {
         'html',
         'css',
+        'config',
+        'conf',
+        'dosini',
+        'yaml',
         'javascript',
         'typescript'
       }, {
@@ -74,10 +78,30 @@ return require('packer').startup(function()
         'pandoc',
         'vimwiki',
         'NeogitStatus',
-        'help'
+        'help',
+        'man'
       }
-      g.indentLine_char = '▏'
+      g.indentLine_char = '▏' -- '│'
       g.indent_blankline_extra_indent_level = -1
+    end
+  }
+
+  use {
+    'mfussenegger/nvim-dap',
+    config = function()
+      local dap = require'dap'
+      dap.adapters.cpp = {
+        type = 'executable',
+        attach = {
+          pidProperty = "pid",
+          pidSelect = "ask"
+        },
+        command = 'lldb-vscode', -- my binary was called 'lldb-vscode-11'
+        env = {
+          LLDB_LAUNCH_FLAG_LAUNCH_IN_TTY = "YES"
+        },
+        name = "lldb"
+      }
     end
   }
 
@@ -110,8 +134,9 @@ return require('packer').startup(function()
   -- -- Intellisense
   use {
     'neovim/nvim-lspconfig',
+    requires = {'onsails/lspkind-nvim'},
     config = function()
-
+      require 'lspkind'.init()
 
       fn.sign_define("LspDiagnosticsSignError",       {text = "", texthl = "LspDiagnosticsSignError"})
       fn.sign_define("LspDiagnosticsSignWarning",     {text = "", texthl = "LspDiagnosticsSignWarning"})
@@ -240,6 +265,7 @@ return require('packer').startup(function()
     'kyazdani42/nvim-tree.lua',
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
     config = function()
+      g.nvim_tree_follow = 0
       g.nvim_tree_indent_markers = 1
       g.nvim_tree_ignore = { '.git', 'node_modules', 'target' }
       g.nvim_tree_git_hl = 1
@@ -324,6 +350,7 @@ return require('packer').startup(function()
         html_break_line_filetype = {
           'html' , 'vue' , 'typescriptreact' , 'svelte' , 'javascriptreact'
         },
+
         -- ignore alphanumeric, operators, quote, curly brace, and square bracket
         ignored_next_char = "[%w%.%+%-%=%/%,\"'{}%[%]]"
       }
@@ -342,14 +369,51 @@ return require('packer').startup(function()
   }
 
   use {
+    'glacambre/firenvim',
+    run = function() vim.fn['firenvim#install'](0) end,
+    config = function()
+      cmd [[ au BufEnter github.com_*.txt set filetype=markdown ]]
+
+      g.firenvim_config = {
+        globalSettings = { alt = 'all' },
+        localSettings = {
+          ['.*'] = {
+            ['cmdline'] = 'neovim',
+            ['content'] = 'text',
+            ['priority'] = 0,
+            ['selector'] = 'textarea',
+            ['takeover'] = 'always',
+          },
+          ['https?://twitter.com'] = { takeover = 'never', priority = 1 },
+          ['https?://regex101.com'] = { takeover = 'never', priority = 1 },
+          ['https?://www.twitch.tv'] = { takeover = 'never', priority = 1 },
+          ['https?://www.destiny.gg'] = { takeover = 'never', priority = 1 },
+        }
+      }
+    end
+  }
+
+  use {
     'TimUntersberger/neogit',
-    event = 'VimEnter *'
+    event = 'VimEnter *',
     -- opt = true,
     -- cmd = {'Neogit'},
+    config = function ()
+      cmd ""
+      cmd "augroup neogit_commands"
+      cmd "au!"
+
+      cmd "au BufEnter NeogitStatus* nunmap cs"
+      cmd "au BufEnter NeogitStatus* nunmap cS"
+
+      cmd "au BufLeave NeogitStatus* nmap   cs <Plug>Csurround"
+      cmd "au BufLeave NeogitStatus* nmap   cS <Plug>CSurround"
+
+      cmd "augroup END"
+    end
   }
 
   use {'sukima/xmledit', ft = 'xml'}
-  use {'alvan/vim-closetag', ft = {'xml', 'html'}}
   use {'tmhedberg/SimpylFold', ft = 'python'}
   use {'KeitaNakamura/tex-conceal.vim', ft = 'tex'}
 
