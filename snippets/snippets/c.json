@@ -1,0 +1,23 @@
+{
+  "Main Template": {
+    "prefix": "main",
+    "body": [
+      "#include <stdio.h>",
+      "",
+      "int main() {",
+      "    $1",
+      "}"
+    ],
+    "description": "Main Template"
+  },
+  "Header guard": {
+    "prefix": "guard",
+    "body": [
+      "#ifndef ${VIM:toupper(expand('%:r'))}_H",
+      "#define ${VIM:toupper(expand('%:r'))}_H",
+      "\n$0\n",
+      "#endif // ${VIM:toupper(expand('%:r'))}_H"
+    ],
+    "description": "A header guard"
+  }
+}

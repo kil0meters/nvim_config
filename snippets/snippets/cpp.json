@@ -1,0 +1,33 @@
+{
+  "Main Template": {
+    "prefix": "main",
+    "body": [
+      "#include <iostream>",
+      "",
+      "using namespace std;",
+      "",
+      "int main() {",
+      "  $0",
+      "",
+      "  return 0;",
+      "}"
+    ],
+    "description": "Main Template"
+  },
+  "class": {
+    "prefix": [
+      "class",
+      "cls"
+    ],
+    "body": [
+      "class $1",
+      "{",
+      "private:",
+      "public:",
+      "  $1($2);",
+      "  ~$1();",
+      "};"
+    ],
+    "description": "A C++ class definition"
+  }
+}

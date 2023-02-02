@@ -1,0 +1,61 @@
+{
+  "Gtk Widget": {
+    "prefix": "gtkwidget",
+    "body": [
+      "use gtk::glib;",
+      "use gtk::prelude::*;",
+      "use gtk::subclass::prelude::*;",
+      "",
+      "mod imp {",
+      "    use super::*;",
+      "    use glib::subclass;",
+      "",
+      "    static PROPERTIES: [subclass::Property; 0] = [];",
+      "",
+      "    #[derive(Debug)]",
+      "    pub struct ${1:ClassName} {$0}",
+      "",
+      "    impl ${2:ParentType}Impl for ${1:ClassName} {}",
+      "    impl WidgetImpl for ${1:ClassName} {}",
+      "    impl ObjectSubclass for ${1:ClassName} {",
+      "        const NAME: &'static str = \"${1:ClassName}\";",
+      "        type Type = super::${1:ClassName};",
+      "        type ParentType = gtk::${2:ParentType};",
+      "        type Instance = subclass::simple::InstanceStruct<Self>;",
+      "        type Class = subclass::simple::ClassStruct<Self>;",
+      "",
+      "        glib::object_subclass!();",
+      "",
+      "        fn class_init(klass: &mut Self::Class) {",
+      "            klass.install_properties(&PROPERTIES);",
+      "        }",
+      "",
+      "        fn new() -> Self {",
+      "            Self {}",
+      "        }",
+      "    }",
+      "",
+      "    impl ObjectImpl for ${1:ClassName} {}",
+      "}",
+      "",
+      "glib::wrapper! {",
+      "    pub struct ${1:ClassName}(ObjectSubclass<imp::${1:ClassName}>)",
+      "        @extends gtk::Widget, gtk::${2:ParentType};",
+      "}",
+      "",
+      "impl ${1:ClassName} {",
+      "    pub fn new() -> Self {",
+      "        glib::Object::new(&[]).expect(\"Failed to create ${1:ClassName} widget\")",
+      "    }",
+      "}"
+    ],
+    "description": "Creates a gtk subclass of a widget"
+  },
+  "Print Variable": {
+    "prefix": "pv",
+    "body": [
+      "println!(\"$1: {}\", $1);$0"
+    ],
+    "description": "Print a variable"
+  }
+}

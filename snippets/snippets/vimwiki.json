@@ -1,0 +1,40 @@
+{
+    "HeadingOne": {
+        "prefix": "=",
+        "body": [
+            "= ${1:title} ="
+        ],
+        "description": "Heading One"
+    },
+    "HeadingTwo": {
+        "prefix": "==",
+        "body": [
+            "== ${1:title} =="
+        ],
+        "description": "Heading Two"
+    },
+    "HeadingThree": {
+        "prefix": "===",
+        "body": [
+            "=== ${1:title} ==="
+        ],
+        "description": "Heading Three"
+    },
+    "HeadingFour": {
+        "prefix": "====",
+        "body": [
+            "==== ${1:title} ===="
+        ],
+        "description": "Heading Four"
+    },
+    "Title": {
+      "prefix": "title",
+      "body": [
+        "%title ${1:Title}",
+        "%date $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE",
+        "",
+        "$0"
+      ],
+      "description": "Fill in the title and date"
+    }
+}
