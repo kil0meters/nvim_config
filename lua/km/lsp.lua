@@ -1,5 +1,3 @@
-print("hello")
-
 local lsp = require("lspconfig")
 local forward_search
 
@@ -16,6 +14,8 @@ elseif vim.fn.has("unix") == 1 then
         onSave = true,
     }
 end
+
+lsp.dartls.setup {}
 
 lsp.texlab.setup {
     -- on_attach=default_on_attach,

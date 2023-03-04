@@ -36,10 +36,10 @@ require("lazy").setup({
         config = function()
             require 'nvim-treesitter.configs'.setup {
                 ensure_installed = { "c", "lua", "rust", "vim", "help", "python", "javascript", "html", "typescript",
-                    "latex" },
+                    "latex", "dart" },
                 indent = {
                     enable = true,
-                    disable = { "html", "python" }
+                    disable = { "html", "python", "dart" }
                 },
                 highlight = {
                     enable = true,
@@ -231,6 +231,11 @@ require("lazy").setup({
         config = function() require("Comment").setup() end
     },
 
+    {
+        "mfussenegger/nvim-dap"
+    },
+
+    "akinsho/flutter-tools.nvim",
     "kyazdani42/nvim-web-devicons",
     "tpope/vim-surround",
     "nmac427/guess-indent.nvim",
