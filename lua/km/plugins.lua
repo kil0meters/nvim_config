@@ -18,15 +18,33 @@ require("lazy").setup({
         config = function()
             require("gruvbox").setup({
                 -- contrast = "hard",
-                italic = false,
+                italic = {
+                    strings = true,
+                    comments = false,
+                    operators = false,
+                },
                 bold = false,
                 overrides = {
-                    WinBarNC = { fg = "#a89984", bg = "#282828" }
+                    WinBarNC = { fg = "#a89984", bg = "#282828" },
+                    SignColumn = {bg = "#282828"}
                 }
             })
 
+
             vim.cmd [[ colorscheme gruvbox ]]
         end,
+    },
+
+    {
+        "folke/trouble.nvim",
+        config = function()
+            require("trouble").setup {
+                icons = false,
+                -- your configuration comes here
+                -- or leave it empty to use the default settings
+                -- refer to the configuration section below
+            }
+        end
     },
 
     {
@@ -35,8 +53,8 @@ require("lazy").setup({
         build = ":TSUpdate",
         config = function()
             require 'nvim-treesitter.configs'.setup {
-                ensure_installed = { "c", "lua", "rust", "vim", "help", "python", "javascript", "html", "typescript",
-                    "latex", "dart" },
+                ensure_installed = { "c", "cpp", "lua", "rust", "zig", "vim", "python", "javascript", "html", "typescript",
+                    "latex", "dart", "tsx", "go", "php", "css" },
                 indent = {
                     enable = true,
                     disable = { "html", "python", "dart" }
@@ -55,6 +73,14 @@ require("lazy").setup({
         end
     },
 
+    -- {
+    --     'nvim-treesitter/nvim-treesitter-context',
+    --     dependencies = {
+    --         { 'nvim-treesitter/nvim-treesitter' }
+    --     }
+    -- },
+
+
     {
         "nvim-telescope/telescope.nvim",
         event = "VeryLazy",
@@ -62,6 +88,7 @@ require("lazy").setup({
             { "nvim-lua/popup.nvim" },
             { "nvim-lua/plenary.nvim" },
             { "nvim-telescope/telescope-fzy-native.nvim" },
+            -- { "nvim-telescope/telescope-dap.nvim" },
             { "nvim-telescope/telescope-ui-select.nvim" },
         },
         config = function()
@@ -99,18 +126,28 @@ require("lazy").setup({
 
             require("telescope").load_extension("fzy_native")
             require("telescope").load_extension("ui-select")
+            -- require("telescope").load_extension("dap")
         end
     },
 
     {
         "VonHeikemen/lsp-zero.nvim",
-        branch = "v1.x",
+        branch = "v2.x",
         event = "VeryLazy",
         dependencies = {
             -- LSP Support
             { "neovim/nvim-lspconfig" },
-            { "williamboman/mason.nvim" },
+            {
+                'williamboman/mason.nvim',
+                build = function()
+                    pcall(vim.cmd, 'MasonUpdate')
+                end,
+            },
             { "williamboman/mason-lspconfig.nvim" },
+            -- { "mfussenegger/nvim-dap" },
+            -- { "jay-babu/mason-nvim-dap.nvim" },
+            -- { "rcarriga/nvim-dap-ui" },
+            -- { "theHamsta/nvim-dap-virtual-text" },
 
             -- Autocompletion
             { "hrsh7th/nvim-cmp" },
@@ -125,26 +162,37 @@ require("lazy").setup({
             { "rafamadriz/friendly-snippets" },
         },
         config = function()
-            local lsp = require('lsp-zero')
-            local luasnip = require('luasnip')
-            local cmp = require('cmp')
+            local lsp = require("lsp-zero").preset({
+                name = "recommended",
+            })
+            local luasnip = require("luasnip")
 
-            lsp.preset('recommended')
+            local cmp = require("cmp")
+            local cmp_action = require("lsp-zero").cmp_action()
 
-            lsp.setup_nvim_cmp({
-                window = nil,
+            lsp.on_attach(function(client, bufnr)
+                lsp.default_keymaps({buffer = bufnr})
+            end)
+
+            cmp.setup({
+                confirmation = { completeopt = 'menu,menuone,noinsert' },
+                sources = {
+                    {name = 'path'},
+                    {name = 'nvim_lsp'},
+                    {name = 'buffer', keyword_length = 3},
+                    {name = 'luasnip', keyword_length = 2},
+                },
                 mapping = {
                     ["<Tab>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
-                            local entry = cmp.get_selected_entry()
-                            if not entry then
-                                cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-                            else
-                                cmp.confirm()
-                            end
+                            -- local entry = cmp.get_selected_entry()
+                            -- if not entry then
+                            --     cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+                            -- else
+                            cmp.confirm({ select = true })
+                            -- end
                         elseif luasnip.expand_or_jumpable() then
                             luasnip.expand_or_jump()
-
                         else
                             fallback()
                         end
@@ -231,11 +279,8 @@ require("lazy").setup({
         config = function() require("Comment").setup() end
     },
 
-    {
-        "mfussenegger/nvim-dap"
-    },
-
     "akinsho/flutter-tools.nvim",
+    "ThePrimeagen/harpoon",
     "kyazdani42/nvim-web-devicons",
     "tpope/vim-surround",
     "nmac427/guess-indent.nvim",

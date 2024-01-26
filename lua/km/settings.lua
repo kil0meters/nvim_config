@@ -8,7 +8,8 @@ vim.opt.completeopt    = { 'menuone', 'noselect' } -- completion options
 vim.opt.expandtab      = true -- use spaces instead of tabs
 vim.opt.fillchars      = { fold = " ", vert = "│", eob = " ", msgsep = "‾" }
 vim.opt.foldlevel      = 99 -- don't fold files when opened
-vim.opt.foldmethod     = 'indent' -- fold based on indentation by default
+vim.opt.foldmethod     = 'expr' -- fold based on indentation by default
+vim.opt.foldexpr       = "nvim_treesitter#foldexpr()"
 vim.opt.lazyredraw     = true -- don't redraw while executing macros
 vim.opt.mouse          = 'nv' -- mouse control
 vim.opt.pumheight      = 10
@@ -17,7 +18,7 @@ vim.opt.relativenumber = true -- relative line numbering
 vim.opt.scrolloff      = 10 -- screen lines to keep above and below cursor
 vim.opt.shortmess      = 'filnxtToOFc' -- ui setting
 vim.opt.showmode       = false --
-vim.opt.signcolumn     = 'no' -- enable sign in number line
+vim.opt.signcolumn     = 'yes' -- enable sign in number line
 vim.opt.smartcase      = true -- override 'ignorecase' if there is a capital letter
 vim.opt.smartindent    = true -- automatically indent in functions vim.bo.shiftwidth = ident
 vim.opt.smarttab       = true -- backspace deletes 'shiftwidth' spaces
