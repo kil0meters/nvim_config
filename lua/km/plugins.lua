@@ -19,9 +19,11 @@ require("lazy").setup({
             require("gruvbox").setup({
                 -- contrast = "hard",
                 italic = {
-                    strings = true,
+                    strings = false,
+                    emphasis = false,
                     comments = false,
                     operators = false,
+                    folds = false,
                 },
                 bold = false,
                 overrides = {
